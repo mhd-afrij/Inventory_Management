@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './context/AuthContext'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
@@ -14,28 +13,26 @@ import LoginHistory from './pages/LoginHistory'
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="products" element={<Products />} />
-          <Route path="products/low-stock" element={<LowStock />} />
-          <Route path="products/expired" element={<ExpiredProducts />} />
-          <Route path="stock" element={<StockManagement />} />
-          <Route path="suppliers" element={<Suppliers />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="login-history" element={<LoginHistory />} />
-        </Route>
-      </Routes>
-    </AuthProvider>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Dashboard />} />
+        <Route path="products" element={<Products />} />
+        <Route path="products/low-stock" element={<LowStock />} />
+        <Route path="products/expired" element={<ExpiredProducts />} />
+        <Route path="stock" element={<StockManagement />} />
+        <Route path="suppliers" element={<Suppliers />} />
+        <Route path="reports" element={<Reports />} />
+        <Route path="login-history" element={<LoginHistory />} />
+      </Route>
+    </Routes>
   )
 }
 
