@@ -75,6 +75,6 @@ Document/      Project documentation and test report
 
 For the detailed setup guide and API endpoint reference, see [.md/INSTALLATION.md](.md/INSTALLATION.md).
 
-## License
+## Contributing
 
-This project is licensed under the [MIT License](backend/composer.json).
+Create work from `develop` using `feature/<name>` or `fix/<name>`, then open a pull request back to `develop`. Keep commits focused and use Conventional Commit prefixes where practical. `main` is reserved for reviewed, stable releases; CI must pass before merging.
