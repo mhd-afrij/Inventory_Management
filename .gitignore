@@ -1,0 +1,27 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies and generated frontend output
+frontend/node_modules/
+frontend/dist/
+backend/vendor/
+
+# Laravel runtime files
+backend/bootstrap/cache/*.php
+!backend/bootstrap/cache/.gitignore
+backend/storage/framework/cache/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/storage/logs/
+backend/storage/*.key
+
+# Tooling and OS files
+.phpunit.result.cache
+npm-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

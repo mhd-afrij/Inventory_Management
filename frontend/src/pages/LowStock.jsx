@@ -1,0 +1,99 @@
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import api from '../config/axios'
+import { HiOutlineExclamationTriangle, HiOutlineArrowLeft } from 'react-icons/hi2'
+
+export default function LowStock() {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchLowStock = async () => {
+      try {
+        const response = await api.get('/products-low-stock')
+        const data = response.data
+        setProducts(data.data || data.products || (Array.isArray(data) ? data : []))
+      } catch (error) {
+        console.error('Failed to fetch low stock products:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchLowStock()
+  }, [])
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+        <Link
+          to="/products"
+          className="p-2 rounded-lg text-warmgray/60 hover:text-charcoal hover:bg-beige/30 transition-colors"
+        >
+          <HiOutlineArrowLeft className="w-5 h-5" />
+        </Link>
+        <div>
+          <h1 className="text-2xl font-bold text-charcoal">Low Stock Items</h1>
+          <p className="text-warmgray text-sm mt-1">Products that need restocking</p>
+        </div>
+      </div>
+
+      <div className="bg-cream rounded-xl border border-beige overflow-hidden">
+        {loading ? (
+          <div className="flex items-center justify-center h-48">
+            <div className="w-8 h-8 border-4 border-terracotta border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-12">
+            <HiOutlineExclamationTriangle className="w-16 h-16 mx-auto text-sage/60 mb-4" />
+            <h3 className="text-lg font-medium text-warmgray">All stocked up!</h3>
+            <p className="text-warmgray/60 text-sm mt-1">No products are below their minimum stock level</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-[#f5f0ea] border-b border-beige">
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-warmgray uppercase">Product</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-warmgray uppercase">Category</th>
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-warmgray uppercase">Batch</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold text-warmgray uppercase">Current Qty</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold text-warmgray uppercase">Threshold</th>
+                  <th className="text-right px-4 py-3 text-xs font-semibold text-warmgray uppercase">Deficit</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-beige/50">
+                {products.map((product) => (
+                  <tr key={product.id} className="hover:bg-beige/30 transition-colors">
+                    <td className="px-4 py-3">
+                      <div>
+                        <p className="font-medium text-charcoal">{product.name}</p>
+                        <p className="text-xs text-warmgray/60">{product.brand}</p>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="text-xs font-medium px-2 py-1 rounded-full bg-[#f5f0ea] text-warmgray">
+                        {product.category}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-warmgray font-mono">{product.batch_number}</td>
+                    <td className="px-4 py-3 text-right">
+                      <span className="text-sm font-bold text-mutedred">{product.quantity}</span>
+                    </td>
+                    <td className="px-4 py-3 text-right text-sm text-warmgray">
+                      {product.low_stock_threshold}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span className="text-sm font-bold text-mutedred">
+                        {product.low_stock_threshold - product.quantity}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
